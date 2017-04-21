@@ -46,8 +46,8 @@ class FileSystemVerticle extends AbstractVerticle {
         def size = response.header('Content-Length')
 
         def data = [
-                'size': size,
-                'url' : getUrl(id),
+                'size'  : size,
+                'url'   : getUrl(id),
                 'status': size ? 'valid' : 'queued'
         ]
 
@@ -55,9 +55,7 @@ class FileSystemVerticle extends AbstractVerticle {
             start()
         }
 
-
         return data
-
     }
 
     private String getUrl(id) {
