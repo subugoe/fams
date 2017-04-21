@@ -12,8 +12,6 @@ class FileSystemVerticle extends AbstractVerticle {
 
     def id
 
-    def host = 'gdz.sub.uni-goettingen.de'
-
     FileSystemVerticle(id) {
         this.id = id
     }
@@ -36,7 +34,12 @@ class FileSystemVerticle extends AbstractVerticle {
     }
 
     Map getMetadata(String id) {
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient()
+                .newBuilder()
+                .followRedirects(true)
+                .followSslRedirects(true)
+                .build()
+
         Request request = new Request.Builder()
                 .url(getUrl(id))
                 .head()
@@ -58,7 +61,7 @@ class FileSystemVerticle extends AbstractVerticle {
         return data
     }
 
-    private String getUrl(id) {
-        return "http://${host}/pdfcache/${id}/${id}___LOG_0001.pdf"
+    private static String getUrl(id) {
+        return "http://gdz.sub.uni-goettingen.de/download/${id}/${id}___LOG_0001.pdf"
     }
 }

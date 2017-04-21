@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'de.unigoettingen.sub'
-version '1.0-SNAPSHOT'
+version '0.1.1-SNAPSHOT'
 
 apply plugin: 'groovy'
 
