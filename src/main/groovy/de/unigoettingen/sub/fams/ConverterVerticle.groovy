@@ -20,7 +20,8 @@ class ConverterVerticle extends AbstractVerticle {
     }
 
     void compute() {
-        HttpClientOptions options = new HttpClientOptions().setDefaultHost('https://processing.sub.uni-goettingen.de')
+        HttpClientOptions options = new HttpClientOptions()
+                .setDefaultHost('https://processing.sub.uni-goettingen.de')
 
         HttpClient client = vertx.createHttpClient(options)
         client.post("/process/pdf/${id}", { response ->
@@ -29,10 +30,12 @@ class ConverterVerticle extends AbstractVerticle {
     }
 
     private void send() {
-        vertx.eventBus().send('process', toJson(), { ar ->
-            if (ar.succeeded()) {
-                vertx.close()
-            }
+        vertx
+                .eventBus()
+                .send('process', toJson(), { ar ->
+                    if (ar.succeeded()) {
+                        vertx.close()
+                    }
         })
     }
 

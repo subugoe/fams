@@ -26,9 +26,11 @@ class FileSystemVerticle extends AbstractVerticle {
                 'id': id
         ])
 
-        vertx.eventBus().consumer("process", { message ->
-            println(message.body())
-        })
+        vertx
+                .eventBus()
+                .consumer("process", { message ->
+                     println(message.body())
+                })
 
         vertx.deployVerticle(ConverterVerticle.class.getName(), new DeploymentOptions().setConfig(json));
     }
@@ -45,7 +47,10 @@ class FileSystemVerticle extends AbstractVerticle {
                 .head()
                 .build();
 
-        Response response = client.newCall(request).execute();
+        Response response = client
+                .newCall(request)
+                .execute();
+
         def size = response.header('Content-Length')
 
         def data = [
