@@ -40,7 +40,6 @@ class Server {
             def response = routingContext.response()
             response.putHeader('content-type', 'application/json')
 
-            // Write to the response and end it
             response.end(state.encodePrettily())
         })
 
