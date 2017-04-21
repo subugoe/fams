@@ -1,4 +1,4 @@
-package de.unigoettingen.sub.fileservice
+package de.unigoettingen.sub.fams
 
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.http.HttpClient
@@ -6,7 +6,6 @@ import io.vertx.core.http.HttpClientOptions
 import io.vertx.core.json.JsonObject
 
 /**
- *
  * @author Ingo Pfennigstorf <i.pfennigstorf@gmail.com>
  */
 class ConverterVerticle extends AbstractVerticle {

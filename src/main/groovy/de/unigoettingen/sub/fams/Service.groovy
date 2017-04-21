@@ -1,4 +1,4 @@
-package de.unigoettingen.sub.fileservice
+package de.unigoettingen.sub.fams
 
 import io.vertx.core.Launcher
 

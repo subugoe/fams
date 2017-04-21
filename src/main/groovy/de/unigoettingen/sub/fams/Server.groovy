@@ -1,4 +1,4 @@
-package de.unigoettingen.sub.fileservice
+package de.unigoettingen.sub.fams
 
 import io.vertx.core.Vertx
 import io.vertx.core.http.HttpMethod
@@ -9,7 +9,6 @@ import io.vertx.ext.web.Router
 import io.vertx.ext.web.handler.CorsHandler
 
 /**
- *
  * @author Ingo Pfennigstorf <i.pfennigstorf@gmail.com>
  */
 class Server {
