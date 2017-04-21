@@ -1,6 +1,8 @@
 package de.unigoettingen.sub.fileservice
 
 import io.vertx.core.AbstractVerticle
+import io.vertx.core.http.HttpClient
+import io.vertx.core.http.HttpClientOptions
 import io.vertx.core.json.JsonObject
 
 /**
@@ -8,32 +10,36 @@ import io.vertx.core.json.JsonObject
  * @author Ingo Pfennigstorf <i.pfennigstorf@gmail.com>
  */
 class ConverterVerticle extends AbstractVerticle {
-    long period = 300L
-
-    int counter = 0
+    String id
+    int code = 0
 
     @Override
-    public void start() {
-
-        // Every `period` ms, the given Handler is called.
-        vertx.setPeriodic(period, { l ->
-            compute(config().getString('bumidi'))
-            send()
-        })
+    void start() {
+        id = config().getString('id')
+        compute()
+        send()
     }
 
-    void compute(String py) {
-        println(py + counter)
-        counter ++
+    void compute() {
+        HttpClientOptions options = new HttpClientOptions().setDefaultHost('https://processing.sub.uni-goettingen.de')
+
+        HttpClient client = vertx.createHttpClient(options)
+        client.post("/process/pdf/${id}", { response ->
+            code = response.statusCode()
+        }).putHeader('id', id).end(id)
     }
 
     private void send() {
-      vertx.eventBus().publish('Ahoi', toJson());
+        vertx.eventBus().send('process', toJson(), { ar ->
+            if (ar.succeeded()) {
+                vertx.close()
+            }
+        })
     }
 
     private JsonObject toJson() {
-      return new JsonObject()
-          .put('exchange', 'vert.x stock exchange')
-          .put('symbol', counter)
+        return new JsonObject()
+                .put('id', id)
+                .put('code', code)
     }
 }

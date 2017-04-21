@@ -4,34 +4,63 @@ import io.vertx.core.AbstractVerticle
 import io.vertx.core.DeploymentOptions
 import io.vertx.core.Vertx
 import io.vertx.core.json.JsonObject
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
 
-/**
- * @author Ingo Pfennigstorf <i.pfennigstorf@gmail.com>
- */
 class FileSystemVerticle extends AbstractVerticle {
 
     def id
 
-    public FileSystemVerticle(id) {
+    def host = 'gdz.sub.uni-goettingen.de'
+
+    FileSystemVerticle(id) {
         this.id = id
     }
 
-    def map = [
-            'foo'    : 'bar',
-            'sheytan': 'bumidi',
-            'bumidi': id
-    ]
+    Vertx getVertx() {
+        return Vertx.vertx()
+    }
 
-
+    @Override
     void start() {
-        super.start();
+        def json = new JsonObject([
+                'id': id
+        ])
 
-        def vertx = Vertx.vertx()
-        def json = new JsonObject(map)
+        vertx.eventBus().consumer("process", { message ->
+            println(message.body())
+        })
 
-        for (foo in map) {
-            // Deploy the verticle with a configuration.
-            vertx.deployVerticle(ConverterVerticle.class.getName(), new DeploymentOptions().setConfig(json));
+        vertx.deployVerticle(ConverterVerticle.class.getName(), new DeploymentOptions().setConfig(json));
+    }
+
+    Map getMetadata(String id) {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(getUrl(id))
+                .head()
+                .build();
+
+        Response response = client.newCall(request).execute();
+        def size = response.header('Content-Length')
+
+        def data = [
+                'size': size,
+                'url' : getUrl(id),
+                'status': size ? 'valid' : 'queued'
+        ]
+
+        if (!size) {
+            start()
         }
+
+
+        return data
+
+    }
+
+    private String getUrl(id) {
+        return "http://${host}/pdfcache/${id}/${id}___LOG_0001.pdf"
     }
 }
