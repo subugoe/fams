@@ -1,7 +1,6 @@
 package de.unigoettingen.sub.fams
 
 import io.vertx.core.AbstractVerticle
-import io.vertx.core.http.HttpClient
 import io.vertx.core.http.HttpClientOptions
 import io.vertx.core.json.JsonObject
 
@@ -20,10 +19,10 @@ class ConverterVerticle extends AbstractVerticle {
     }
 
     void compute() {
-        HttpClientOptions options = new HttpClientOptions()
+        def options = new HttpClientOptions()
                 .setDefaultHost('https://processing.sub.uni-goettingen.de')
 
-        HttpClient client = vertx.createHttpClient(options)
+        def client = vertx.createHttpClient(options)
         client.post("/process/pdf/${id}", { response ->
             code = response.statusCode()
         }).putHeader('id', id).end(id)

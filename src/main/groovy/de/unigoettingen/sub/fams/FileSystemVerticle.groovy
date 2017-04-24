@@ -11,6 +11,9 @@ import okhttp3.Response
 
 class FileSystemVerticle extends AbstractVerticle {
 
+    static final VALID = 'valid'
+    static final QUEUED = 'queued'
+
     def id
 
     FileSystemVerticle(id) {
@@ -36,7 +39,7 @@ class FileSystemVerticle extends AbstractVerticle {
         vertx.deployVerticle(ConverterVerticle.class.getName(), new DeploymentOptions().setConfig(json));
     }
 
-    Map getMetadata(String id) {
+    def getMetadata(String id) {
         OkHttpClient client = new OkHttpClient()
                 .newBuilder()
                 .followRedirects(true)
@@ -57,7 +60,7 @@ class FileSystemVerticle extends AbstractVerticle {
         def data = [
                 'size'  : size,
                 'url'   : StringEscapeUtils.escapeJavaScript(getUrl(id)),
-                'status': size ? 'valid' : 'queued'
+                'status': size ? VALID : QUEUED
         ]
 
         if (!size) {
@@ -67,7 +70,7 @@ class FileSystemVerticle extends AbstractVerticle {
         return data
     }
 
-    private static String getUrl(id) {
+    private static getUrl(id) {
         return "http://gdz.sub.uni-goettingen.de/download/${id}/${id}___LOG_0001.pdf"
     }
 }

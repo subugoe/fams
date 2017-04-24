@@ -3,7 +3,6 @@ package de.unigoettingen.sub.fams
 import io.vertx.core.Vertx
 import io.vertx.core.http.HttpMethod
 import io.vertx.core.json.JsonObject
-import io.vertx.core.logging.Logger
 import io.vertx.core.logging.LoggerFactory
 import io.vertx.ext.web.Router
 import io.vertx.ext.web.handler.CorsHandler
@@ -17,7 +16,7 @@ class Server {
 
         def vertx = Vertx.vertx()
 
-        Logger logger = LoggerFactory.getLogger('processing')
+        def logger = LoggerFactory.getLogger('processing')
 
         def server = vertx.createHttpServer()
         def router = Router.router(vertx)
