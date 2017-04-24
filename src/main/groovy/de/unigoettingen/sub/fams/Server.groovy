@@ -28,7 +28,7 @@ class Server {
         def route = router.route(HttpMethod.GET, '/pdf/:id')
 
         route.handler({ routingContext ->
-            def id = (String) routingContext.request().getParam("id")
+            def id = (String) routingContext.request().getParam('id')
             def files = new FileSystemVerticle(id)
 
             def state = new JsonObject(files.getMetadata(id))

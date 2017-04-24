@@ -3,6 +3,7 @@ package de.unigoettingen.sub.fams
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.DeploymentOptions
 import io.vertx.core.Vertx
+import io.vertx.core.impl.StringEscapeUtils
 import io.vertx.core.json.JsonObject
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -28,9 +29,9 @@ class FileSystemVerticle extends AbstractVerticle {
 
         vertx
                 .eventBus()
-                .consumer("process", { message ->
-                     println(message.body())
-                })
+                .consumer('process', { message ->
+            println(message.body())
+        })
 
         vertx.deployVerticle(ConverterVerticle.class.getName(), new DeploymentOptions().setConfig(json));
     }
@@ -55,7 +56,7 @@ class FileSystemVerticle extends AbstractVerticle {
 
         def data = [
                 'size'  : size,
-                'url'   : getUrl(id),
+                'url'   : StringEscapeUtils.escapeJavaScript(getUrl(id)),
                 'status': size ? 'valid' : 'queued'
         ]
 

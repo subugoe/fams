@@ -33,9 +33,9 @@ class ConverterVerticle extends AbstractVerticle {
         vertx
                 .eventBus()
                 .send('process', toJson(), { ar ->
-                    if (ar.succeeded()) {
-                        vertx.close()
-                    }
+            if (ar.succeeded()) {
+                vertx.close()
+            }
         })
     }
 
