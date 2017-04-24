@@ -43,6 +43,8 @@ class Server {
             response.end(state.encodePrettily())
         })
 
-        server.requestHandler(router.&accept).listen(8080)
+        def port = System.getenv('PORT').toInteger() > 0 ? System.getenv('PORT').toInteger() : 8080
+
+        server.requestHandler(router.&accept).listen(port)
     }
 }

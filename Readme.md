@@ -8,8 +8,10 @@ The URL pattern to get the data is ```/pdf/id``` where id can be any identifier.
 
 ## Quickstart
 
-Clone this repository, call ```./gradlew shadowJar```, wait for completion and afterwards run the service with ```java -jar build/libs/fams-1.0-SNAPSHOT-fat.jar```.
+Clone this repository, call ```./gradlew shadowJar```, wait for completion and afterwards run the service with ```java -jar build/libs/fams-0.1.2-SNAPSHOT-fat.jar```.
 A webserver will be spawned and ist reachable at http://localhost:8080.
+
+If an environment variable `PORT` is specified, the server will run on the specified port.
 
 An example URL for calling the service is http://localhost:8080/pdf/PPN875220959.
 
