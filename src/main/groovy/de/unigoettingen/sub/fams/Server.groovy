@@ -47,7 +47,7 @@ class Server extends AbstractVerticle {
                     .end(state.encodePrettily())
         })
 
-        def port = config().getInteger('PORT', 8080)
+        def port = System.getenv('PORT') ? System.getenv('PORT').toInteger() : 8080
 
         server
                 .requestHandler(router.&accept)
