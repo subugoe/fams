@@ -4,7 +4,7 @@ Fams provides a simple service to access PDF Metadata if a PDF is existing on a 
 
 If it does not exist, it sends a job to another service to trigger the creation of the pdf.
 
-The URL pattern to get the data is ```/pdf/id``` where id can be any identifier.
+The URL pattern to get the data is ```/pdf/context/id``` where id can be any identifier and context may be the name of a service or client/customer.
 
 ## Quickstart
 
@@ -13,7 +13,7 @@ A webserver will be spawned and ist reachable at http://localhost:8080.
 
 If an environment variable `PORT` is specified, the server will run on the specified port.
 
-An example URL for calling the service is http://localhost:8080/pdf/PPN875220959.
+An example URL for calling the service is http://localhost:8080/pdf/gdz/PPN875220959.
 
 ## Todo
 

@@ -1,31 +1,44 @@
 package de.unigoettingen.sub.fams
 
 import io.vertx.core.AbstractVerticle
+import io.vertx.core.Future
 import io.vertx.core.http.HttpClientOptions
 import io.vertx.core.json.JsonObject
+import io.vertx.core.logging.LoggerFactory
 
 /**
  * @author Ingo Pfennigstorf <i.pfennigstorf@gmail.com>
  */
 class ConverterVerticle extends AbstractVerticle {
-    String id
-    int code = 0
+    def id
+    def contextId
 
     @Override
-    void start() {
+    void start(Future<Void> fut) {
         id = config().getString('id')
+        contextId = config().getString('context')
         compute()
         send()
     }
 
     void compute() {
+        def logger = LoggerFactory.getLogger('processing')
+
         def options = new HttpClientOptions()
                 .setDefaultHost('https://processing.sub.uni-goettingen.de')
 
+        def parameters = new JsonObject([
+                id     : id,
+                context: contextId
+        ]).toString()
+
         def client = vertx.createHttpClient(options)
-        client.post("/process/pdf/${id}", { response ->
-            code = response.statusCode()
-        }).putHeader('id', id).end(id)
+        client.post("/process/pdf/", { response ->
+            logger.info(response.statusCode() + ' - ' + response.statusMessage())
+        })
+                .setChunked(true)
+                .write(parameters)
+                .end()
     }
 
     private void send() {
@@ -41,6 +54,6 @@ class ConverterVerticle extends AbstractVerticle {
     private JsonObject toJson() {
         return new JsonObject()
                 .put('id', id)
-                .put('code', code)
+                .put('context', contextId)
     }
 }
