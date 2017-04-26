@@ -15,6 +15,10 @@ If an environment variable `PORT` is specified, the server will run on the speci
 
 An example URL for calling the service is http://localhost:8080/pdf/gdz/PPN875220959.
 
+### Docker
+
+The service can also be run with docker, by calling ```docker run -it --rm --name fams-run fams```
+
 ## Todo
 
 Currently all urls and paths are hard-coded in the source code. This needs to be configurable.
