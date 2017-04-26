@@ -19,6 +19,10 @@ An example URL for calling the service is http://localhost:8080/pdf/gdz/PPN87522
 
 The service can also be run with docker, by calling ```docker run -it --rm --name fams-run fams```
 
+### Development
+
+For local development, the command ```./gradlew run``` starts a daemon and rebuilds the application automatically when source files have been changed.
+
 ## Todo
 
 Currently all urls and paths are hard-coded in the source code. This needs to be configurable.
