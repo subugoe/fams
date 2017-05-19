@@ -1,12 +1,28 @@
+buildscript {
+    ext {
+        kotlin_version = '1.1.2-4'
+        vertx_version = '3.4.1'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
 plugins {
+    id 'java'
     id 'application'
     id 'com.github.johnrengelman.shadow' version '1.2.3'
 }
 
-group 'de.unigoettingen.sub'
-version '0.1.2-SNAPSHOT'
+apply plugin: 'kotlin'
 
-apply plugin: 'groovy'
+sourceCompatibility = '1.8'
+
+group 'de.unigoettingen.sub'
+version '0.3.0-SNAPSHOT'
 
 repositories {
     maven {
@@ -19,19 +35,24 @@ def watchForChange = 'src/**/*'
 def doOnChange = './gradlew classes'
 
 dependencies {
-    compile 'org.codehaus.groovy:groovy-all:2.3.11'
-    compile 'io.vertx:vertx-core:3.4.1'
-    compile 'io.vertx:vertx-lang-groovy:3.4.1'
-    compile 'io.vertx:vertx-web:3.4.1'
-    compile 'io.vertx:vertx-config:3.4.1'
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-runtime:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+    compile "io.vertx:vertx-core:$vertx_version"
+    compile "io.vertx:vertx-lang-kotlin:$vertx_version"
+    compile "io.vertx:vertx-web:$vertx_version"
+    compile "io.vertx:vertx-config:$vertx_version"
     compile 'com.squareup.okhttp3:okhttp:3.7.0'
     testCompile group: 'junit', name: 'junit', version: '4.11'
     testCompile 'com.squareup.okhttp3:mockwebserver:3.7.0'
-    testCompile 'io.vertx:vertx-unit:3.4.1'
+    testCompile "io.vertx:vertx-unit:$vertx_version"
 }
 
 mainClassName = 'io.vertx.core.Launcher'
 def mainVerticleName = 'de.unigoettingen.sub.fams.Server'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 shadowJar {
     classifier = 'fat'
@@ -44,7 +65,12 @@ shadowJar {
 }
 
 run {
-  args = ['run', mainVerticleName, "--redeploy=$watchForChange", "--launcher-class=$mainClassName", "--on-redeploy=$doOnChange"]
+  args = [
+          'run', mainVerticleName,
+          "--redeploy=$watchForChange",
+          "--launcher-class=$mainClassName",
+          "--on-redeploy=$doOnChange"
+  ]
 }
 
 task wrapper(type: Wrapper) {
