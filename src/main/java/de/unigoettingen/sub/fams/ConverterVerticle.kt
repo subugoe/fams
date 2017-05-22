@@ -1,7 +1,6 @@
 package de.unigoettingen.sub.fams
 
 import io.vertx.core.AbstractVerticle
-import io.vertx.core.DeploymentOptions
 import io.vertx.core.Future
 import io.vertx.core.http.HttpClient
 import io.vertx.core.http.HttpClientOptions

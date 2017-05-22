@@ -6,7 +6,6 @@ import okhttp3.Request
 import okhttp3.Response
 
 /**
- *
  * @author Ingo Pfennigstorf <i.pfennigstorf@gmail.com>
  */
 class FileSystemCheck {
