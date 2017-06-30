@@ -1,9 +1,10 @@
 package de.unigoettingen.sub.fams
 
+import com.amazonaws.ClientConfiguration
+import com.amazonaws.Protocol
+import com.amazonaws.auth.BasicAWSCredentials
+import com.amazonaws.services.s3.AmazonS3Client
 import io.vertx.core.impl.StringEscapeUtils
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
 
 /**
  * @author Ingo Pfennigstorf <i.pfennigstorf@gmail.com>
@@ -14,31 +15,30 @@ class FileSystemCheck {
     val QUEUED: String = "queued"
 
     fun getMetadata(id: String, contextId: String): Map<String, Any> {
-        val client: OkHttpClient = OkHttpClient()
-                .newBuilder()
-                .followRedirects(true)
-                .followSslRedirects(true)
-                .build()
 
-        val request: Request = Request.Builder()
-                .url(getUrl(id, contextId))
-                .head()
-                .build();
+        val accessKey = System.getenv("ACCESS_KEY")
+        val secretKey = System.getenv("SECRET_KEY")
+        val credentials = BasicAWSCredentials(accessKey, secretKey)
 
-        val response: Response = client
-                .newCall(request)
-                .execute();
+        val clientConfig = ClientConfiguration()
+        clientConfig.protocol = Protocol.HTTP
 
-        var size: String? = response.header("Content-Length")
+        val conn = AmazonS3Client(credentials, clientConfig)
+        conn.setEndpoint("http://s3.fs.gwdg.de")
 
-        if (size === null) size = "0"
+        var size: Long
 
-        val realSize: Int = size.toInt()
+        try {
+            val document = conn.getObjectMetadata(contextId, "pdf/${id}/${id}.pdf")
+            size = document.contentLength
+        } catch (e: Exception) {
+            size = 0
+        }
 
-        val status = if (realSize > 0) VALID else QUEUED
+        val status = if (size > 0) VALID else QUEUED
         val data: Map<String, Any> = hashMapOf(
                 "id" to id,
-                "size" to realSize,
+                "size" to size,
                 "url" to StringEscapeUtils.escapeJavaScript(getUrl(id, contextId)),
                 "status" to status,
                 "context" to contextId)
@@ -47,7 +47,7 @@ class FileSystemCheck {
     }
 
     private fun getUrl(id: String, context: String): String {
-        return "http://${context}.sub.uni-goettingen.de/download/${id}/${id}___LOG_0001.pdf"
+        return "http://${context}.sub.uni-goettingen.de/download/${id}/${id}.pdf"
     }
 
 }

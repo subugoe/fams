@@ -8,6 +8,7 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.0.RC2"
     }
 }
 
@@ -18,8 +19,7 @@ plugins {
 }
 
 apply plugin: 'kotlin'
-
-sourceCompatibility = '1.8'
+apply plugin: "io.spring.dependency-management"
 
 group 'de.unigoettingen.sub'
 version '0.3.0-SNAPSHOT'
@@ -29,6 +29,12 @@ repositories {
         url "https://oss.sonatype.org/content/repositories/snapshots"
     }
     jcenter()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom 'com.amazonaws:aws-java-sdk-bom:1.10.77'
+    }
 }
 
 def watchForChange = 'src/**/*'
@@ -42,7 +48,7 @@ dependencies {
     compile "io.vertx:vertx-lang-kotlin:$vertx_version"
     compile "io.vertx:vertx-web:$vertx_version"
     compile "io.vertx:vertx-config:$vertx_version"
-    compile 'com.squareup.okhttp3:okhttp:3.7.0'
+    compile 'com.amazonaws:aws-java-sdk-s3'
     testCompile group: 'junit', name: 'junit', version: '4.11'
     testCompile 'com.squareup.okhttp3:mockwebserver:3.7.0'
     testCompile "io.vertx:vertx-unit:$vertx_version"
@@ -55,14 +61,17 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 shadowJar {
-    classifier = 'fat'
+    baseName = 'app'
+    classifier = 'shadow'
+
     manifest {
-        attributes "Main-Verticle": mainVerticleName
+        attributes 'Main-Verticle': mainVerticleName
     }
     mergeServiceFiles {
         include 'META-INF/services/io.vertx.core.spi.VerticleFactory'
     }
 }
+
 
 run {
   args = [
@@ -74,5 +83,5 @@ run {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.5'
+    gradleVersion = '4.0'
 }
