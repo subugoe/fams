@@ -1,7 +1,7 @@
 buildscript {
     ext {
-        kotlin_version = '1.1.2-4'
-        vertx_version = '3.4.1'
+        kotlin_version = '1.1.4-3'
+        vertx_version = '3.4.2'
     }
     repositories {
         mavenCentral()
@@ -83,5 +83,5 @@ run {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.0'
+    gradleVersion = '4.2'
 }
