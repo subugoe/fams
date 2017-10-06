@@ -13,7 +13,7 @@ The following environment variables need to be present in the system (also in th
 * `ACCESS_KEY` for the s3 storage
 * `SECRET_KEY` for the s3 storage
 
-Clone this repository, call ```./gradlew shadowJar```, wait for completion and afterwards run the service with ```java -jar build/libs/app-0.3.0-SNAPSHOT-shadow.jar```.
+Clone this repository, call ```./gradlew shadowJar```, wait for completion and afterwards run the service with ```java -jar build/libs/app-0.4.0-SNAPSHOT-shadow.jar```.
 A webserver will be spawned and ist reachable at http://localhost:8080.
 
 If an environment variable `PORT` is specified, the server will run on the specified port.

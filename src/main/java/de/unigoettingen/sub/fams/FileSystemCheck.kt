@@ -6,9 +6,6 @@ import com.amazonaws.auth.BasicAWSCredentials
 import com.amazonaws.services.s3.AmazonS3Client
 import io.vertx.core.impl.StringEscapeUtils
 
-/**
- * @author Ingo Pfennigstorf <i.pfennigstorf@gmail.com>
- */
 class FileSystemCheck {
 
     val VALID: String = "valid"

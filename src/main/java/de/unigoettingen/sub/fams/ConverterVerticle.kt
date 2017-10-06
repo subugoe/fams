@@ -7,9 +7,6 @@ import io.vertx.core.http.HttpClientOptions
 import io.vertx.core.json.JsonObject
 import io.vertx.core.logging.LoggerFactory
 
-/**
- * @author Ingo Pfennigstorf <i.pfennigstorf@gmail.com>
- */
 class ConverterVerticle : AbstractVerticle() {
 
     override fun start(fut: Future<Void>) {

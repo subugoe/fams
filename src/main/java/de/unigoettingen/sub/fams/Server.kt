@@ -11,9 +11,6 @@ import io.vertx.core.logging.LoggerFactory
 import io.vertx.ext.web.Router
 import io.vertx.ext.web.handler.CorsHandler
 
-/**
- * @author Ingo Pfennigstorf <i.pfennigstorf@gmail.com>
- */
 class Server : AbstractVerticle() {
 
     override fun start(fut: Future<Void>) {
