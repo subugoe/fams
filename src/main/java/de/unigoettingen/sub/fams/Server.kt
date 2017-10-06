@@ -25,13 +25,14 @@ class Server : AbstractVerticle() {
                 .allowedMethod(HttpMethod.GET)
                 .allowedMethod(HttpMethod.POST))
 
-        val route = router.route(HttpMethod.GET, "/pdf/:contextId/:id")
+        val route = router.route(HttpMethod.GET, "/pdf/:contextId/:document/:log")
 
         route.handler({ routingContext ->
-            val id: String = routingContext.request().getParam("id")
+            val document: String = routingContext.request().getParam("document")
+            val log: String = routingContext.request().getParam("log")
             val contextId: String = routingContext.request().getParam("contextId")
             val fileSystemCheck: FileSystemCheck = FileSystemCheck()
-            val state = JsonObject(fileSystemCheck.getMetadata(id, contextId))
+            val state = JsonObject(fileSystemCheck.getMetadata(document, log, contextId))
 
             if (state.getString("status") === fileSystemCheck.QUEUED) {
                 vertx.deployVerticle("de.unigoettingen.sub.fams.ConverterVerticle", DeploymentOptions().setConfig(state));

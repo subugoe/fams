@@ -13,20 +13,21 @@ import io.vertx.core.logging.LoggerFactory
 class ConverterVerticle : AbstractVerticle() {
 
     override fun start(fut: Future<Void>) {
-        val id: String = config().getString("id")
+        val document: String = config().getString("document")
+        val log: String = config().getString("log")
         val contextId: String = config().getString("context")
-        compute(id, contextId)
-        send(id, contextId)
+        compute(document, log, contextId)
+        send(document, log, contextId)
     }
 
-    fun compute(id: String, contextId: String) {
+    fun compute(document: String, log: String, contextId: String) {
         val logger = LoggerFactory.getLogger("processing")
 
         val options = HttpClientOptions()
                 .setDefaultHost("https://processing.sub.uni-goettingen.de")
 
         val parameterMap: Map<String, String> = hashMapOf(
-                "id" to id,
+                "document" to document,
                 "context" to contextId
         )
 
@@ -41,19 +42,20 @@ class ConverterVerticle : AbstractVerticle() {
                 .end()
     }
 
-    private fun send(id: String, contextId: String) {
+    private fun send(document: String, log: String, contextId: String) {
         vertx
                 .eventBus()
-                .send<Any>("process", toJson(id, contextId), { ar ->
+                .send<Any>("process", toJson(document, log, contextId), { ar ->
                     if (ar.succeeded()) {
                         vertx.close()
                     }
                 })
     }
 
-    private fun toJson(id: String, contextId: String): JsonObject {
+    private fun toJson(document: String, log: String, contextId: String): JsonObject {
         return JsonObject()
-                .put("id", id)
+                .put("document", document)
+                .put("log", log)
                 .put("context", contextId)
     }
 }

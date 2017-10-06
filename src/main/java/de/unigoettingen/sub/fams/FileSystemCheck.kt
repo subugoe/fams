@@ -14,7 +14,7 @@ class FileSystemCheck {
     val VALID: String = "valid"
     val QUEUED: String = "queued"
 
-    fun getMetadata(id: String, contextId: String): Map<String, Any> {
+    fun getMetadata(document: String, log: String, contextId: String): Map<String, Any> {
 
         val accessKey = System.getenv("ACCESS_KEY")
         val secretKey = System.getenv("SECRET_KEY")
@@ -29,25 +29,26 @@ class FileSystemCheck {
         var size: Long
 
         try {
-            val document = conn.getObjectMetadata(contextId, "pdf/${id}/${id}.pdf")
-            size = document.contentLength
+            val documentMetadata = conn.getObjectMetadata(contextId, "pdf/${document}/${log}.pdf")
+            size = documentMetadata.contentLength
         } catch (e: Exception) {
             size = 0
         }
 
         val status = if (size > 0) VALID else QUEUED
         val data: Map<String, Any> = hashMapOf(
-                "id" to id,
+                "document" to document,
+                "log" to log,
                 "size" to size,
-                "url" to StringEscapeUtils.escapeJavaScript(getUrl(id, contextId)),
+                "url" to StringEscapeUtils.escapeJavaScript(getUrl(document, log, contextId)),
                 "status" to status,
                 "context" to contextId)
 
         return data
     }
 
-    private fun getUrl(id: String, context: String): String {
-        return "http://${context}.sub.uni-goettingen.de/download/${id}/${id}.pdf"
+    private fun getUrl(id: String, log: String, context: String): String {
+        return "http://${context}.sub.uni-goettingen.de/download/pdf/${id}/${log}.pdf"
     }
 
 }
