@@ -25,6 +25,7 @@ class ConverterVerticle : AbstractVerticle() {
 
         val parameterMap: Map<String, String> = hashMapOf(
                 "document" to document,
+                "log" to log,
                 "context" to contextId
         )
 
