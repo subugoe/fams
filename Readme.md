@@ -22,7 +22,7 @@ An example URL for calling the service is `http://localhost:8080/pdf/gdz/PPN8752
 
 ### Docker
 
-The service can also be run with docker, by calling ```docker run -it --rm --name fams-run fams```
+The service can also be run with docker, by calling ```docker run -it --rm -e ACCESS_KEY -e SECRET_KEY -e PORT -p 9999:9999 --name fams-run fams```
 
 ### Development
 
